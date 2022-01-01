@@ -38,6 +38,11 @@ type HomepageData = {
   forecasts: Record<Day, Forecast>;
 };
 
+const desMoinesCoordinates = {
+  lat: 41.5887,
+  lon: -93.6212,
+};
+
 const processRawData = (data: RawData) => {
   let processedData = {
     ...data,
