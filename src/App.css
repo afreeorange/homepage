@@ -1,27 +1,104 @@
+/*! minireset.css v0.0.6 | MIT License | github.com/jgthms/minireset.css */
+html,
+body,
+p,
+ol,
+ul,
+li,
+blockquote,
+figure,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: bold;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+select {
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+img,
+video {
+  height: auto;
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+/* --- */
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #101010;
+  background: #060606;
   padding: 1em;
   color: white;
 }
 
-sub,
-sup {
-  font-size: 0.45em;
+header {
+  display: grid;
+  opacity: 0.4;
+  transition: opacity 0.25s ease-in-out;
 }
-sub {
-  margin-left: -2.25em;
-  margin-right: 1em;
+
+header:hover {
+  opacity: 0.9;
+}
+
+header .layout-1 {
+  margin: 0 auto;
+}
+
+.time {
+  text-align: center;
+  font-size: 5em;
 }
 
 .date {
   text-align: center;
   font-size: 3em;
-  margin-top: 1em;
 }
 
 .day-count {
@@ -29,20 +106,38 @@ sub {
   color: #666;
 }
 
-.percent {
-  display: inlineblock;
-  font-size: small;
-  border: 1px solid #333;
-  border-radius: 0.25em;
+.layout-1 {
+  display: grid;
+  font-size: 0.75em;
+  grid-template-columns: 2.75em auto;
+  width: 130px;
 }
 
-.percent .done {
-  color: red;
-  padding: 0 0.125em;
-  border-right: 1px solid #333;
+.layout-1 .icon {
+  font-size: 2.25em;
+  display: flex;
+  align-items: center;
 }
 
-.percent .left {
-  color: green;
-  padding: 0 0.125em;
+.layout-1.moon .icon {
+  font-size: 1.75em !important;
+}
+
+.layout-1 > div > div {
+  display: flex;
+  align-items: center;
+}
+
+.day-week > div > div > span {
+  color: gray;
+  margin-left: 0.5em;
+}
+
+footer {
+  position: fixed;
+  bottom: 0.5em;
+  opacity: 0.1;
+  font-size: 0.75em;
+  width: calc(100% - 3em);
+  text-align: center;
 }

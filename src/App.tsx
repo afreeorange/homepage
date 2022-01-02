@@ -1,111 +1,152 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import format from "date-fns/format";
-import differenceInHours from "date-fns/differenceInHours";
-import formatRelative from "date-fns/formatRelative";
+
+import { WiHumidity } from "react-icons/wi";
+
+import {
+  BsArrowDownShort,
+  BsArrowUpShort,
+  BsMoon,
+  BsSun,
+  BsGeoAlt,
+} from "react-icons/bs";
+
+import { GoCalendar } from "react-icons/go";
 
 import "./App.css";
-import sampleData from "./sample.json";
-
-type RawData = typeof sampleData;
-
-type Day =
-  | "Monday"
-  | "Tuesday"
-  | "Wednesday"
-  | "Thursday"
-  | "Friday"
-  | "Saturday"
-  | "Sunday";
-
-type Forecast = {
-  temperature: {
-    high: number;
-    low: number;
-    feelsLike: number;
-  };
-  humidity: number;
-};
-
-type HomepageData = {
-  city: {
-    name: string;
-    latitude: number;
-    longitude: number;
-  };
-  sunrise: Date;
-  sunset: Date;
-  forecasts: Record<Day, Forecast>;
-};
-
-const desMoinesCoordinates = {
-  lat: 41.5887,
-  lon: -93.6212,
-};
+import { HomepageData, RawData } from "./types";
+import { DES_MOINES_COORDINATES } from "./constants";
 
 const processRawData = (data: RawData) => {
   let processedData = {
     ...data,
   };
-  processedData.list.forEach((l) => new Date(l.dt * 1000));
   return processedData;
 };
 
-const Homepage = () => {
-  const weatherData = processRawData(sampleData);
+const Sun = () => (
+  <div className="sun layout-1">
+    <div className="icon">
+      <BsSun />
+    </div>
+    <div>
+      <div className="rise">
+        <BsArrowUpShort /> 2:03 am
+      </div>
+      <div className="set">
+        <BsArrowDownShort /> 5:43 pm
+      </div>
+    </div>
+  </div>
+);
+
+const Moon = () => (
+  <div className="moon layout-1">
+    <div className="icon">
+      <BsMoon />
+    </div>
+    <div>
+      <div className="rise">
+        <BsArrowUpShort /> 2:03 am
+      </div>
+      <div className="set">
+        <BsArrowDownShort /> 5:43 pm
+      </div>
+    </div>
+  </div>
+);
+
+const Humidity = () => (
+  <div className="humidity">
+    <WiHumidity /> <span>78%</span>
+  </div>
+);
+
+const DayAndWeekCount: React.FC<{
+  date: Date;
+}> = ({ date }) => {
+  const dayOfYear = parseInt(format(date, "d"));
+  const weekOfYear = parseInt(format(date, "Io"));
+  const dayPercent = Math.round(dayOfYear / 365) * 100;
+  const weekPercent = Math.round(weekOfYear / 365) * 100;
 
   return (
-    <>
-      <h1>
-        <small>It&#8217;s {format(new Date(), "EEEE 'the' io")}</small>
-        <br />
-        In {weatherData.city.name} we have{" "}
-        {weatherData.list[0].weather[0].description}. It&#8217;s{" "}
-        {Math.round(weatherData.list[0].main.temp)}F but it feels like{" "}
-        {Math.round(weatherData.list[0].main.feels_like)}F
-      </h1>
-      <h2>
-        The sun will rise at{" "}
-        {format(weatherData.city.sunrise * 1000, "h:m aaa")} and set at{" "}
-        {format(weatherData.city.sunset * 1000, "h:m aaa")} (
-        {differenceInHours(weatherData.city.sunset * 1000, new Date())})
-      </h2>
-      <ul>
-        <li>{Math.round(weatherData.list[0].main.temp_max)}F High</li>
-        <li>{Math.round(weatherData.list[0].main.temp_min)}F Low</li>
-        <li>{Math.round(weatherData.list[0].main.humidity)}% Humidity</li>
-      </ul>
-    </>
+    <div className="day-week layout-1">
+      <div className="icon">
+        <GoCalendar />
+      </div>
+      <div>
+        <div>
+          Day {dayOfYear} <span>{dayPercent}%</span>
+        </div>
+        <div>
+          Week {weekOfYear} <span>{weekPercent}%</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Time = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setTime(new Date()), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  return <div className="time">It&#8217;s {format(time, "h:mm aaa")}</div>;
+};
+
+const Header: React.FC = ({ children }) => {
+  const childrenCount = React.Children.count(children);
+
+  return (
+    <header
+      style={{
+        gridTemplateColumns: `repeat(${childrenCount}, 1fr)`,
+        marginBottom: "3em",
+      }}
+    >
+      {children}
+    </header>
+  );
+};
+
+const Footer: React.FC = () => {
+  return (
+    <footer>
+      <Location coordinates={DES_MOINES_COORDINATES} />
+    </footer>
+  );
+};
+
+const Location: React.FC<Pick<HomepageData, "coordinates">> = ({
+  coordinates,
+}) => {
+  return (
+    <div className="location">
+      <BsGeoAlt /> {coordinates.latitude}, {coordinates.longitude}
+    </div>
   );
 };
 
 const MockHomepage = () => {
   const now = new Date();
-  const dayPercent = {
-    done: Math.round(parseInt(format(now, "d")) / 365) * 100,
-    left: (1 - Math.round(parseInt(format(now, "d")) / 365)) * 100,
-  };
-
-  const weekPercent = {
-    done: Math.round(parseInt(format(now, "Io")) / 365) * 100,
-    left: (1 - Math.round(parseInt(format(now, "Io")) / 365)) * 100,
-  };
 
   return (
     <>
-      <div className="date">{format(now, "EEEE', the' io 'of' LLLL")}</div>
-      <div className="day-count">
-        It's the {format(now, "do")} day{" "}
-        <span className="percent">
-          <span className="done">{dayPercent.done}</span>
-          <span className="left">{dayPercent.left}</span>
-        </span>{" "}
-        and {format(now, "Io")} week of the year{" "}
-        <span className="percent">
-          <span className="done">{weekPercent.done}</span>
-          <span className="left">{weekPercent.left}</span>
-        </span>
-      </div>
+      <Header>
+        <Sun />
+        <Moon />
+        <DayAndWeekCount date={now} />
+      </Header>
+      <Time />
+      <div className="date">on {format(now, "EEEE', the' io 'of' LLLL")}</div>
+      <Footer />
     </>
   );
 };
