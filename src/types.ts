@@ -4,6 +4,7 @@ import sampleData from "./sample.json";
 export type RawData = typeof sampleData;
 
 export type Day = typeof DAYS[number];
+
 export type MoonPhase = typeof MOON_PHASES[number];
 
 export type Forecast = {

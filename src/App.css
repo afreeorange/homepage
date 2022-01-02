@@ -135,7 +135,7 @@ header .layout-1 {
 
 footer {
   position: fixed;
-  bottom: 0.5em;
+  bottom: 1em;
   opacity: 0.1;
   font-size: 0.75em;
   width: calc(100% - 3em);

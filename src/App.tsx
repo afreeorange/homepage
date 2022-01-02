@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-
 import format from "date-fns/format";
-
 import { WiHumidity } from "react-icons/wi";
-
 import {
   BsArrowDownShort,
   BsArrowUpShort,
@@ -11,12 +8,13 @@ import {
   BsSun,
   BsGeoAlt,
 } from "react-icons/bs";
-
-import { GoCalendar } from "react-icons/go";
+import { IoCalendarOutline } from "react-icons/io5";
 
 import "./App.css";
 import { HomepageData, RawData } from "./types";
 import { DES_MOINES_COORDINATES } from "./constants";
+
+import data from "./sample.json";
 
 const processRawData = (data: RawData) => {
   let processedData = {
@@ -74,7 +72,7 @@ const DayAndWeekCount: React.FC<{
   return (
     <div className="day-week layout-1">
       <div className="icon">
-        <GoCalendar />
+        <IoCalendarOutline />
       </div>
       <div>
         <div>
@@ -98,7 +96,11 @@ const Time = () => {
     };
   }, []);
 
-  return <div className="time">It&#8217;s {format(time, "h:mm aaa")}</div>;
+  return (
+    <div className="time">
+      It&#8217;s <strong>{format(time, "h:mm aaa")}</strong>
+    </div>
+  );
 };
 
 const Header: React.FC = ({ children }) => {
@@ -145,7 +147,20 @@ const MockHomepage = () => {
         <DayAndWeekCount date={now} />
       </Header>
       <Time />
-      <div className="date">on {format(now, "EEEE', the' io 'of' LLLL")}</div>
+      <section className="date">
+        on {format(now, "EEEE', the' io 'of' LLLL")}
+      </section>
+      <section className="hourly">
+        <ul>
+          {data.hourly.map((h, i) => {
+            return (
+              <li>
+                {i} {new Date(h.dt * 1000).toString()} {h.feels_like}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
       <Footer />
     </>
   );
