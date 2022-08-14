@@ -14,6 +14,11 @@ export type Forecast = {
     feelsLike: number;
   };
   humidity: number;
+  moonPhase: MoonPhase;
+  moonrise: Date;
+  moonset: Date;
+  sunrise: Date;
+  sunset: Date;
 };
 
 export type Alert = {
@@ -32,10 +37,10 @@ export type HomepageData = {
     longitude: number;
   };
   moonPhase: MoonPhase;
-  moonRise: Date;
-  moonSet: Date;
-  sunRise: Date;
-  sunSet: Date;
+  moonrise: Date;
+  moonset: Date;
+  sunrise: Date;
+  sunset: Date;
   yearElapsedPercent: {
     done: number;
     left: number;

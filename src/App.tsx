@@ -136,6 +136,14 @@ const Location: React.FC<Pick<HomepageData, "coordinates">> = ({
   );
 };
 
+const Day = () => {
+  <div className="tile-day">
+    <h2>
+      
+    </h2>
+  </div>
+}
+
 const MockHomepage = () => {
   const now = new Date();
 
@@ -150,12 +158,12 @@ const MockHomepage = () => {
       <section className="date">
         on {format(now, "EEEE', the' io 'of' LLLL")}
       </section>
-      <section className="hourly">
+      <section className="daily">
         <ul>
-          {data.hourly.map((h, i) => {
+          {data.daily.map((h, i) => {
             return (
               <li>
-                {i} {new Date(h.dt * 1000).toString()} {h.feels_like}
+                {new Date(h.dt * 1000).toString()} {h.feels_like.day}
               </li>
             );
           })}
